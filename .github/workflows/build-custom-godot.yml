@@ -21,7 +21,7 @@ jobs:
       - name: Compile Godot Engine for Windows
         run: |
           scons platform=windows arch=x86_64 target=template_release ^
-                build_profile=engine-profile.txt ^
+                build_profile=engine-profile.gdbuild ^
                 -j$env:NUMBER_OF_PROCESSORS
           # Note: The '^' is the line continuation character in Windows cmd.
           # '-j$env:NUMBER_OF_PROCESSORS' uses all available CPU cores.
