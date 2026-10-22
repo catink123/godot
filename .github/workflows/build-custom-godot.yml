@@ -1,0 +1,33 @@
+name: Build Custom Godot Engine (Windows)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Godot Source
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install SCons
+        run: python -m pip install scons
+
+      - name: Compile Godot Engine for Windows
+        run: |
+          scons platform=windows arch=x86_64 target=template_release ^
+                build_profile=engine-profile.txt ^
+                -j$env:NUMBER_OF_PROCESSORS
+          # Note: The '^' is the line continuation character in Windows cmd.
+          # '-j$env:NUMBER_OF_PROCESSORS' uses all available CPU cores.
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-windows-build
+          path: bin/
